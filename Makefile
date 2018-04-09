@@ -8,30 +8,38 @@ HEADERS = $(wildcard *.h)
 SRCS = $(wildcard *.c) 
 
 #adds a .o file for every header file and .c file
-OBJECTS =  $(patsubst %.h %.c, %.o,$(SRCS) $(HEADERS) ) 
+OBJECTS =  $(SRCS:.c=.o)
 
 #libraries to include
-LIBS = -pthread -lSDL
+LIBS = -pthread -lSDL -L./libfractal -lfractal
 
-LIBFRAC =
+TEST= -I./tests
 
 TARGET = main
 
-default: $(TARGET)
-
+default: lib
+	$(MAKE) $(TARGET)
+	
 #compile every object files into the target executable
 $(TARGET): $(OBJECTS)
-	$(CC) $^ -o $@ $(CFLAGS)
+	$(CC) $^ -o $@ $(CFLAGS) $(LIBS)
 
 #compile every .c and .h file into object files
 %.o: %.c $(HEADERS)
 	$(CC) -c $< -o $@ $(CFALGS)
 
-.PHONY: clean lib test
+.PHONY: clean lib test 
 
 clean:
 	$(RM) *.o $(TARGET)
+	(cd libfractal; make rmall)
+	(cd tests; make clean)
 	
+#compiles and runs all test files in ./tests
 test:
+	$(MAKE) -C tests
 
+#compiles the fractal library in ./libfractal
 lib:
+	$(MAKE) -C libfractal
+	

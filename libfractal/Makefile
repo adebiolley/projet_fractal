@@ -1,30 +1,31 @@
 CC = gcc 
 CFLAGS = -Wall -g
 
-HEADERS = fractal.h
+#C headers in directory
+HEADERS = $(wildcard *.h)
 
 #every .c file in directory
-SRCS = fractal.c #tools.c
+SRCS = $(wildcard *.c)
 
-#adds a .o file for every header file and .c file
-OBJECTS =  $(patsubst %.h %.c, %.o,$(SRCS) $(HEADERS) ) 
+#adds a .o file for every source file
+OBJECTS =  $(SRCS:.c=.o)
 
 #libraries to include
 LIBS = -pthread -lSDL
 
-TARGET = libfractal
+TARGET = libfractal.a
 
 default: $(TARGET)
 
-#compile every object files into the target executable
+#compile every object files into a library file
 $(TARGET): $(OBJECTS)
-	$(CC) $^ -o $@ $(CFLAGS)
+	ar -rcs -o $@ $^
 
 #compile every .c and .h file into object files
 %.o: %.c $(HEADERS)
 	$(CC) -c $< -o $@ $(CFALGS)
 
-.PHONY: clean rmall
+.PHONY:clean rmall
 
 clean:
 	$(RM) *.o 

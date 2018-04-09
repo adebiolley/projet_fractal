@@ -1,22 +1,29 @@
 #ifndef _HEADER_FRACTAL_
 #define _HEADER_FRACTAL_
 
+typedef struct fractal fractal_t;
+typedef struct name name_t;
+
+struct name{
+char str[64];
+};
+
 struct fractal{
 
 unsigned int pict_height;
 unsigned int pict_width;
-char name[64];
+name_t name;
 double a;
 double b;
 unsigned int **pict;
-}fractal_t
+};
 
 
 /*
  * allocates a new struct fractal to ptr
  * @return : 0 on succes, 1 if an error occured
 */
-int fractal_new(fractal_t* ptr,unsigned int H, unsigned int W, char *name, double a, double b);
+int fractal_new(fractal_t* ptr,unsigned int H, unsigned int W, name_t name, double a, double b);
 
 
 /*
