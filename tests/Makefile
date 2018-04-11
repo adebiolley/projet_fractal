@@ -23,6 +23,7 @@ default: $(TARGETS)
 #individual compilation of each object file
 $(TARGETS): $(OBJECTS)
 	$(CC) -o $@ $(@:%=%.o) $(CFLAGS)
+	./$@
 
 .PHONY: clean
 
