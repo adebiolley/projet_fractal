@@ -126,4 +126,3 @@ void read_line(FILE * file){
 write_fractal_to_buffer(fractal);
 
 }
-
