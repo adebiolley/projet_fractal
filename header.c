@@ -1,4 +1,3 @@
-
 #include header.h
 
 void sbuf_init(sbuf_t *sp, int n)
