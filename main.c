@@ -68,9 +68,7 @@ int i;
 	exit(EXIT_FAILURE);
 	}
 
-        buff_full=
-        buff_empty=
-        
+            
         //alloue threads de lecture
 	int N_thread_read=argc-begin_argc;
 	pthread_t reader_threads[N_thread_read];
@@ -95,6 +93,7 @@ void read_input(char * filename){
 
 if(strcomp("-",filename)==0){
 filename="stdin";
+}
 
 FILE *file = fopen(filename,"r");
 
@@ -109,9 +108,10 @@ read_line(file);
 }
 fclose(file);
 
-}
 
 }
+
+
 
 void write_fractal_to_buffer(fractal_t *fract){
 //TODO
@@ -126,3 +126,4 @@ void read_line(FILE * file){
 write_fractal_to_buffer(fractal);
 
 }
+
