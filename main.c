@@ -75,15 +75,22 @@ int i;
 	for(i=0;i<N_thread_read;i++){
 	err=pthread_create(&reader_threads[i],NULL,&read_input,argv[i+begin_argc]);
 	        if(err!=0){
-        	printf(stderr,"error : mutex init");
-        	exit(EXIT_FAILURE);
+        	        printf(stderr,"error : pthread_create");
+        	        exit(EXIT_FAILURE);
         	}
 	}
 	
-	/*
-	*
-	*/
-	
+//crée les threads de calcul
+        pthread_t calcul_threads[MAXTHREADS];
+        
+        //alloue les threads de calcul
+        for(i=0;i<MAXTHREADS;i++){
+        err=pthread_create(&calcul_threads[i],NULL,&calculate_fract,NULL);
+                if(err!=0){
+        	printf(stderr,"error : pthread_create");
+        	exit(EXIT_FAILURE);
+        	}
+        }	
 }
 
 /*
@@ -126,3 +133,5 @@ void read_line(FILE * file){
 write_fractal_to_buffer(fractal);
 
 }
+
+
