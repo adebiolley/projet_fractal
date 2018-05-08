@@ -18,14 +18,31 @@ void calculate_fractal(fractal_t* fract);
 //void write_output 
 
 typedef struct{
-fractal_t **buff; //buffer partagé
 int n; //taille du buffer
-int front; //premier élement du buffer
-int rear;//dernier élement du buffer
-sem_t mutex; //protège accès au buffer
+int front;
+int rear;
+fractal_t **buff;
+pthread_mutex_t mutex; //protège accès au buffer
 sem_t empty_slots; //nombre de places libres
 sem_t items;// Nombre d'item dans le buffer
 
-}sbuf_t
+}queue_t
+
+
+
+void queueInit(queue_t *queue,int n);
+
+
+void queueFree(queue_t *queue);
+
+
+void queueAdd(queue_t *queue, fractal_t *f);
+
+//@return :  queue->tail->fract, or NULL if queue is empty
+fractal_t *queueGet(queue_t *queue);
+
+
+
+
 
 #endif

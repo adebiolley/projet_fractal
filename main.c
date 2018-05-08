@@ -13,9 +13,8 @@
 static int DFLAG=0;
 static int MAXTHREADS=5;
 static double BiggestMean=0;
-fractal_t** Fract_buff;//buffer contenant les fractales à calculer
+queue_t * Buff;//buffer contenant les fractales à calculer
 
-sbuf_t
 
 /*
 *pthread_mutex_t=mutex_buffer;
@@ -56,17 +55,14 @@ int i;
 	}
 
 //alloue le buff de fract
-	Fract_buff =(fractal_t)malloc((MAXTHREADS+1)*sizeof(fractal_t*));
-	if(Fract_buff==NULL){
-	printf(stderr,"error : malloc of Fract_buff");
+	Buff =(queue_t)malloc(sizeof(queue_t));
+	if(Buff==NULL){
+	printf(stderr,"error : malloc of Buff");
 	exit(EXIT_FAILURE);
 	}
+	queueInit(Buff,MAXHTREADS);
 
-	err = pthread_mutex_init(&mutex_buffer,NULL);
-	if(err!=0){
-	printf(stderr,"error : mutex init");
-	exit(EXIT_FAILURE);
-	}
+
 
             
         //alloue threads de lecture
@@ -132,6 +128,57 @@ void read_line(FILE * file){
 //section critique
 write_fractal_to_buffer(fractal);
 
+}
+
+/*
+ * La section suivante contient les fonctions correspondant 
+ * à la structure queue 
+ *
+*/
+
+void queueInit(queue_t *queue,int n){
+	
+	sem_init(&(queue->empty_slots), 0, n);      /* Au début, n slots vides */
+    	
+    	sem_init(&(queue->items), 0, 0);      /* Au début, rien à consommer */
+    	
+	pthread_mutex_init(&(queue->mutex),null);
+	queue->n=n;
+	queue->buff = (fractal_t **) calloc(n,sizof(fractal_t*));
+	if(queue->buff==NULL){
+		printf(stderr,"error : calloc");
+        	exit(EXIT_FAILURE);
+	}
+	queue_t->front=queue_t->rear=0;
+	
+}
+
+void queueFree(queue_t *queue){
+	free(queue);
+}
+
+void queueAdd(queue_t *queue, fractal_t *f){
+	sem_wait(&(queue->empty_slots));
+	
+	pthread_mutex_lock(&(queue->mutex));
+	
+	//section critique
+	queue->rear=((queue->rear))%(sp->n);
+	queue->buff[queue->rear]=f;
+	
+	pthread_mutex_unlock(&(queue->mutex));
+	sem_post(&(queue->items));
+	
+}
+
+fractal_t *queueGet(queue_t *queue){
+	sem_wait(&(queue->items));
+	pthread_mutex_lock(&(queue->mutex));
+	
+	fractal_t *fract=(queue->buf)[(queue->front+1)%(queue->n)];
+	queue->front++;
+	pthread_mutex_unlock(&(queue->mutex));
+	sem_post(&(queue->empty_slots));
 }
 
 
