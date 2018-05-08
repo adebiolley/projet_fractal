@@ -7,9 +7,7 @@ void read_input(char * filename);
 
 void read_line(FILE * file);
 
-void write_fractal_to_buffer( fractal_t * fract);
-
-void calculate_fractal(fractal_t* fract);
+void calculate_fractal();
 
 //void read_fractal_from_buffer();
 
@@ -30,17 +28,16 @@ sem_t items;// Nombre d'item dans le buffer
 
 
 
-void queueInit(queue_t *queue,int n);
-
+int queueInit(queue_t *queue,int n);
 
 void queueFree(queue_t *queue);
 
-
-void queueAdd(queue_t *queue, fractal_t *f);
+int queueAdd(queue_t *queue, fractal_t *f);
 
 //@return :  queue->tail->fract, or NULL if queue is empty
 fractal_t *queueGet(queue_t *queue);
 
+void error(char * msg);
 
 
 
